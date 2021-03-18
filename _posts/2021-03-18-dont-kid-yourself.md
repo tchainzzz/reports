@@ -95,7 +95,7 @@ Static mode. The user can upload a CSV file where each line is a conversational 
 | 2 | excuse me what? | Yeah, what do you like to eat? | 
 | 2 | I guess uh fish tacos uh are pretty good | I love fish tacos as well! | 
 
-The above table shows two conversations with ID 1 and 2. Conversation 1 features someone talking about school; conversation 2 features another individual talking [hesitantly] about fish tacos. Then, the user can select a conversation (either 1 or 2) from a drop-down menu, and click on the “Run inference on conversational data” button. At this point, the application will automatically extract the data from the column with the human text, and give you your predictions as well as the total latency, giving us a printout of the form seen in the System Description section.
+The above table shows two conversations with ID 1 and 2. Conversation 1 features someone talking about school; conversation 2 features another individual talking hesitantly about fish tacos. Then, the user can select a conversation (either 1 or 2) from a drop-down menu, and click on the “Run inference on conversational data” button. At this point, the application will automatically extract the data from the column with the human text, and give you your predictions as well as the total latency, giving us a printout of the form seen in the System Description section.
 
 | **Human** | **Prediction** | **Confidence** |
 | ---- | ---- | ---- |
@@ -109,7 +109,11 @@ This shows a printout of turn-by-turn model predictions and confidence scores, a
 
 Interactive mode. This mode allows the user to interactively type sentences for live prediction. This is useful for getting estimates of client age group in hypothetical situations that one might expect to encounter in the wild. To use this mode, the user can simply type each sentence that a user might say on a new line, and then run inference by clicking on the “Run inference on conversational data” button. As with static mode, this will output turn-by-turn predictions as well as the total latency. The output takes on the exact same form as static mode.
 
-Fig. 3: A screenshot of static mode, featuring a preview of conversational data. The user can run inference on this conversation by clicking on “Run inference on conversational data.”
+![A screenshot of static mode, with a preview of conversational data.](../assets/img/turn_age_id_group/static_mode.png)
+
+_Above: A screenshot of static mode, featuring a preview of conversational data. The user can run inference on this conversation by clicking on “Run inference on conversational data.”_
+
+![A screenshot of interactive mode, with an area for user text input.](../assets/img/turn_age_id_group/interactive_mode.png)
 
 Fig. 4: A screenshot of interactive mode, featuring a printout of model predictions as well as the interactive text input area.
 
