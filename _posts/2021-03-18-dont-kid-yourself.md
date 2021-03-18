@@ -93,17 +93,24 @@ Specifically, the ways in which an annotator might identify a user as someone wh
 
 ![Best-performing hyperparameters for the logistic regression model.](../assets/img/turn_age_id_group/best_hyperparams.png)
 
-**Table 3:** Best-performing hyperparameters for the logistic regression model
+**Table 3:** Best-performing hyperparameters for the logistic regression model.
 
 ### Qualitative inspection of BERT model failures
 
 ![Qualitative analysis for BERT model failures.](../assets/img/turn_age_id_group/qualitative_analysis.png)
 
-**Table 4:** Contexts where the `IS_OLD` BERT model made an incorrect prediction
+**Table 4:** Contexts where the `IS_OLD` BERT model made an incorrect prediction.
 
 As shown in Table 4, we find that the `IS_OLD` BERT model has a tendency of producing false positives for some short sequences. This may perhaps be explained by some of the phrases beingmore commonly used by adults than younger users, such as 'i agree', 'sure', 'quite fine'. We also find that the model defaults to positive predictions when it encounters contradictions. Note that the example in Table 4 probably reflects a failure in transcription as well, i.e. the user likely said something that was mistranscribed as “i want to talk with my kid". 
 
 In some cases, ostensibly incorrect predictions turn out to be errors in our weakly supervised labels, and the BERT model correctly infers that the user is an older user. Finally, for the model’s false negatives, we were not able to find consistent patterns in the model’s prediction errors, but did find that they all involved longer sequences (i.e. contexts with more than 512 characters). Further investigation revealed that for many of these false negatives, because they exceeded the BERT token limit of 512, their contexts were split into two windows, with one window containing some phrases typical of an older user, and the other not, resulting in one positive and one negative window prediction. By default, in case of ties, this aggregates to a negative prediction. It thus seems that breaking ties with a positive class prediction is the more appropriate modeling choice. (Defaulting to the positive class was what we had originally implemented but we discovered much later on that the underlying dependency SimpleTransformers had an [implementation error](https://github.com/ThilinaRajapakse/simpletransformers/issues/1049) for resolving tied predictions and always defaulted to the negative prediction.)
+
+
+![Out-of-distribution detection did not help much.](../assets/img/turn_age_id_group/ood.png)
+
+**Table 5:** Utility of out-of-distribution detection. Out-of-distribution detection led to minimal test-time gains.
+
+In Table 5, we briefly discuss the impacts of using out-of-distribution (OOD) detection. Parameter alpha represents the quantile used for calculating the OOD score threshold; _T_ represents the softmax temperature. For more information, consult [5, 6]. A core challenge for this setting is that score-thresholds for out-of-distribution detection calculated on mostly weakly-supervised data may not generalize to good performance on gold data. We notice this effect here: while OOD detection improves performance by 4.2% in the best case (alpha=50, T=0.1), this does not transfer well on the gold data. The thresholds that work best on the `IS_OLD` task on the gold set do not necessarily transfer from the weakly-supervised set as well. Ultimately, we simply choose the threshold calculated at alpha=50, T=0.1 for production, as it results in no worse performance across our data slices. These results may be an inherent limitation of the distributional shift between our gold-labeled and weakly-labeled data.
 
 # Demonstration
 
@@ -177,4 +184,6 @@ This shows a printout of turn-by-turn model predictions and confidence scores, a
 [4] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.  Bert: Pre-training ofdeep bidirectional transformers for language understanding.arXiv preprint arXiv:1810.04805,2018.
 
 [5] Dan Hendrycks and Kevin Gimpel. A baseline for detecting misclassified and out-of-distributionexamples in neural networks, 2018.
+
+[6] Shiyu Liang, Yixuan Li, and R. Srikant. Enhancing the reliability of out-of-distribution imagedetection in neural networks, 2020.
 
