@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Turn-by-Turn Age Group ID From Conversational Data - CS 329S Winter 2021 Reports</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="CS 329S Winter 2021 Reports" property="og:site_name">
+  
+    <meta content="Turn-by-Turn Age Group ID From Conversational Data" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="Using real-world conversational data, we develop a system for providing turn-by-turn age group predictions." property="og:description">
+  
+  
+    <meta content="https://stanford-cs329s.github.io//dont-kid-yourself/" property="og:url">
+  
+  
+    <meta content="2021-03-17T11:04:00-07:00" property="article:published_time">
+    <meta content="https://stanford-cs329s.github.io//about/" property="article:author">
+  
+  
+    <meta content="https://stanford-cs329s.github.io//reports/assets/img/stanfordlogo.png" property="og:image">
+  
+  
+    
+  
+  
+    
+    <meta content="Conversational-AI" property="article:tag">
+    
+    <meta content="NLP" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@chipro">
+    <meta name="twitter:creator" content="@chipro">
+  
+    <meta name="twitter:title" content="Turn-by-Turn Age Group ID From Conversational Data">
+  
+  
+    <meta name="twitter:url" content="https://stanford-cs329s.github.io//dont-kid-yourself/">
+  
+  
+    <meta name="twitter:description" content="Using real-world conversational data, we develop a system for providing turn-by-turn age group predictions.">
+  
+  
+    <meta name="twitter:image:src" content="https://stanford-cs329s.github.io//reports/assets/img/stanfordlogo.png">
+  
+
+	<meta name="description" content="Using real-world conversational data, we develop a system for providing turn-by-turn age group predictions.">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/reports/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/reports/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/reports/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/reports/assets/img/favicon/apple-touch-icon-144x144.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700|Lato:300,400,700&display=swap" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/reports/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/reports/assets/css/main.css">
+</head>
+
+<body>
+
+  <div class="wrapper">
+    
+ 
+<aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="cover-author-image">
+        <a href="/reports/"><img src="/reports/assets/img/stanfordlogo.png" alt="CS 329S"></a>
+      </div>
+      <div class="author-name">CS 329S</div>
+      <p>Machine Learning Systems Design</p>
+    </div>
+  </header> <!-- End Header -->
+
+  <ul class="tags">
+    
+      <li >
+        <a href="/reports/tags/#Conversational-AI" style="font-size: 13px;" class="tag">Conversational-AI
+          <span>(1)</span>
+        </a>
+      </li>
+    
+      <li >
+        <a href="/reports/tags/#Edge-ML" style="font-size: 13px;" class="tag">Edge-ML
+          <span>(1)</span>
+        </a>
+      </li>
+    
+      <li >
+        <a href="/reports/tags/#NLP" style="font-size: 13px;" class="tag">NLP
+          <span>(1)</span>
+        </a>
+      </li>
+    
+  </ul>
+
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Contact us</h3>
+      <ul>
+        
+          <li><a href="https://twitter.com/chipro" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        
+        
+          <li class="linkedin"><a href="https://in.linkedin.com/in/chiphuyen" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        
+        
+          <li class="github"><a href="http://github.com/chiphuyen" target="_blank"><i class="fa fa-github"></i></a></li>
+        
+        
+          <li class="email"><a href="mailto:chip@huyenchip.com"><i class="fa fa-envelope-o"></i></a></li>
+        
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2021 &copy; CS 329S</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    
+    
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Turn-by-Turn Age Group ID From Conversational Data</h1>
+        <div class="page-date"><span>2021, Mar 17&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <h1 id="dont-kid-yourself-turn-by-turn-age-group-id-from-conversational-data">Don’t Kid Yourself: Turn-by-Turn Age Group ID From Conversational Data</h1>
+
+<p><strong>Team members:</strong> Trenton Chang, Caleb Chiam, Avanika Narayan</p>
+
+<h1 id="the-problem">The Problem</h1>
+
+<p>Open-domain AI conversation is an unsolved task in natural language processing. Despite huge breakthroughs like Xiaoice, Meena, and Stanford’s own Chirpy Cardinal, we still have a long way to go before we achieve human-like conversation [1, 2, 3].</p>
+
+<p>One particular challenge inherent in open-domain conversations is its subjectivity: different users want to talk about different things, or might prefer different styles of conversation. This means that personalizing the user’s experience in a conversation is important. Although we can’t infer every single fact about a particular user, we can focus on an important subproblem: age group classification. This task is relevant because of age differences in human conversational interests: for example, younger users may be more inclined to discuss schoolwork, but older users may be more interested in discussing their children or career. Our interest is in automating age classification towards this end.</p>
+
+<p>Further complicating this task is the need for turn-by-turn predictions. For live conversational AI systems, it’s not very useful to know after-the-fact what the user’s age group was. Instead, we’d  like to get some sense of the user’s age group during the conversation itself, gathering information about the user as the conversation progresses, so that the system can react during the conversation and adjust its conversational style or topics accordingly. To our knowledge, this is the first system that explores <em>turn-level</em> user attribute prediction that can be used for inference live during real-time human-AI conversations.</p>
+
+<h1 id="system-description">System Description</h1>
+
+<p>Our system is a machine-learning powered web interface that lets developers access our powerful, in-house models trained on <em>real-world</em> conversational data to perform fine-grained error and instance-level analysis. Currently, due to privacy and legal concerns, access is limited to members of the Alexa Prize Team at Stanford, since we work directly with raw conversational logs from Alexa devices across millions of users in the U.S.</p>
+
+<p>The core of our front-end is a Streamlit-based wrapper with two modes of usage, each targeting a different use case: 1) static mode and 2) interactive mode, which we outline in the Demonstration section. The general input-output behavior is identical in both modes: the user inputs some conversational data, and then passes the input to our backend, which we discuss here.</p>
+
+<p>The backend operates on the input conversational data in two phases: 1) an ML-powered phase and 2) an out-of-distribution filtering phase. The first ML-powered step is based on two BERT-based transformer models for binary sequence classification: one for classifying young users, and one for classifying old users. This is similar to the one-versus-rest setup, and allows us to abstain from making predictions in unconfident regions. Each BERT model outputs turn-level predictions, using the human’s utterances up to a particular turn as context. More details about the particular modeling choices and the inference setup are provided later in this post.</p>
+
+<p>These model predictions are then passed to an out-of-distribution detector which works as follows. In cases where both models return a negative prediction, or contradict one another, we mark this situation as “unknown,” and output this result to the user. Alternately, using maximum-softmax probability based methods [5], if the model prediction falls below a certain confidence threshold, we also mark it as unknown. These failure modes most often occur at the beginning of  the conversation, when the user’s entire conversational history comprises a greeting and their name.</p>
+
+<p><strong>Static mode.</strong> In static mode, the user already has a preset CSV file containing conversational logs. This mode is most useful if the user wants to glean age information about a preset sample of users from their conversational data. We outline the format of the file below in our demonstration. This mode takes as input a CSV file of conversational information, and outputs a printout of model predictions and confidence scores on each turn of the data.</p>
+
+<p>As a toy example, one might upload something of the form</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>ID</strong></th>
+      <th><strong>Human</strong></th>
+      <th><strong>Bot</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>hi</td>
+      <td>Hello! How are you today?</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>i went to school</td>
+      <td>That sounds fun! What did you do?</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>i studied math and had a lot of work</td>
+      <td>Oh, I’m sorry to hear that.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>hi</td>
+      <td>Hello! How are you today?</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>i’m alright thanks what about you</td>
+      <td>I’m good, thanks for asking! Hey, if you don’t mind me asking, what’s your favorite dish?</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>excuse me what?</td>
+      <td>Yeah, what do you like to eat?</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>I guess uh fish tacos uh are pretty good</td>
+      <td>I love fish tacos as well!</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The above table shows two conversations with ID 1 and 2. Conversation 1 features the user talking about school; conversation 2 features the user talking [hesitantly] about fish tacos. This is then passed to the backend, from which a printout about the model predictions, model confidence, and latency is obtained.</p>
+
+<p><strong>Interactive mode.</strong> In this mode, the user can type arbitrary sentences representing an imaginary conversation, in order to more narrowly probe hypothetical situations in conversational data. This can give a user signal as to whether strong age-related information can be extracted from a given conversational setting. The form of the output is the same as above.</p>
+
+<h1 id="our-ml-powered-approach">Our ML-Powered Approach</h1>
+
+<h2 id="data-collection-and-processing">Data collection and processing</h2>
+
+<p>We use two data streams that we pulled from our internal Alexa Prize conversational logs:</p>
+<ul>
+  <li>a small <strong>gold-labeled</strong> set of 7426 conversational turns over 270 conversations. For each conversational turn, we output whether we believe each context is from a young or old user, or unknown, based on that turn (and the turns before it).</li>
+  <li>a <strong>weakly-supervised</strong> set of 102252 turns over 1854 conversations. These are scraped programmatically using manually identified phrases associated with age, such as “mommy”, “daddy”, “my kids”, “schoolwork” – taking care to include both gendered and gender-neutral terminology. We also scrape instances of “years old”, where the user explicitly makes an age disclosure. Conversational turns prior to the age-identifying phrase are labeled as unknown, while all turns including and after the phrase are labeled with the corresponding age group label.</li>
+</ul>
+
+<p>From these sets of data, we construct weakly-supervised and gold-labeled subsets for training and evaluation. These subsets are engineered to be balanced in the number of positive and negative conversations and conversational turns, with steps taken to prevent data leakage between splits. We do a stratified 70-15-15 train-val-test split.</p>
+
+<h2 id="modeling">Modeling</h2>
+
+<p><img src="../assets/img/turn_age_id_group/bert.png" alt="Schematic diagram of BERT architecture." /></p>
+
+<p><strong>Fig. 1:</strong> Schematic of BERT architecture, which we use for our sequence classification models.</p>
+
+<p><strong>BERT.</strong> We finetune a BERT [4] model for sequence classification, specifically <code class="language-plaintext highlighter-rouge">bert-base-uncased.</code> We use the SimpleTransformer library to initialize the model in a wrapper that allows for sliding window predictions, where, if the input exceeds the BERT model token limit, it is split into multiple windows and predictions are computed separately for each window and then aggregated into an overall label. To find optimal hyperparameters, we run a sweep configuration using Weights &amp; Biases.</p>
+
+<p><img src="../assets/img/turn_age_id_group/tfidf_bow.png" alt="TFIDF formula and count vectorization visualization" /></p>
+
+<p><strong>Fig. 2:</strong> Formula for TF-IDF (left) and visualization of count vectorization (right), alternative word featurization techniques that we try.</p>
+
+<p><strong>Logistic regression baselines.</strong> To benchmark the performance of our fine-tuned BERT models, we present two baselines, a TF-IDF logistic regression model and a bag-of-words logistic regression model. We use L2 regularization and choose the best hyperparameters using grid search.</p>
+
+<h2 id="evaluation">Evaluation</h2>
+
+<p><img src="https://raw.githubusercontent.com/tchainzzz/reports/cs329s-youre-kidding-me/assets/img/turn_age_id_group/mode_accuracy_new.png" width="700" class="center" /></p>
+
+<p><strong>Table 1:</strong> Evaluation of BERT model and baselines on test split and gold dataset. Although there is a gap between our gold-labeled and weakly-supervised performance, we still achieve promising results using BOW for the <code class="language-plaintext highlighter-rouge">IS_YOUNG</code> model and BERT for the <code class="language-plaintext highlighter-rouge">IS_OLD</code> model.</p>
+
+<p>We evaluate the accuracy and F1 score of the BERT models and baselines on the test split and gold datasets. We find that all models perform well on the test split of the data, but do not generalize as well to the gold dataset. That the baselines perform particularly well on the test split is unsurprising given thatthe positive examples in the weakly supervised data have been identified based on the presence ofspecific key phrases. Thus, a logistic regression model that weights these phrases highly would beable to make predictions with very high accuracy. However, it is noteworthy that, for the <code class="language-plaintext highlighter-rouge">IS_OLD</code> task, the BERT model achieves the highest F1 score on the gold dataset and an accuracy score that is very slightly worse than the best-performing TF-IDF model. This suggests that BERT has picked up on useful signals beyond simple phrase detection (see Table 2 for a few examples.) For the <code class="language-plaintext highlighter-rouge">IS_YOUNG</code> task, however, BERT performs poorly with a low F1 score stemming from its high false negative rate, and BOW achieves the best performance by far.</p>
+
+<p><img src="https://raw.githubusercontent.com/tchainzzz/reports/cs329s-youre-kidding-me/assets/img/turn_age_id_group/correct_pred.png" width="700" class="center" /></p>
+
+<p><strong>Table 2:</strong> Contexts where the BERT model correctly predicts the label on the <code class="language-plaintext highlighter-rouge">IS_OLD</code> task while the logistic regression models do not.</p>
+
+<h3 id="differences-in-is_young-and-is_old-task-difficulty">Differences in <code class="language-plaintext highlighter-rouge">IS_YOUNG</code> and <code class="language-plaintext highlighter-rouge">IS_OLD</code> task difficulty</h3>
+<p>For the <code class="language-plaintext highlighter-rouge">IS_YOUNG</code> task, we find that the low F1 scores of BERT and TF-IDF are due to their high false negative rates. This suggests that there are useful signals of a young user’s age that the model is not currently able to pick up on, resulting in a false negative. We hypothesize that the disparity in performance between the <code class="language-plaintext highlighter-rouge">IS_OLD</code> and <code class="language-plaintext highlighter-rouge">IS_YOUNG</code> tasks may be due to inherent differences in difficulty.</p>
+
+<p>Specifically, the ways in which an annotator might identify a user as someone who is young are more varied – the user’s choice of favorite foods, TV shows, and movies may make it apparent that the user is not old, while the converse is less likely to occur, i.e. there are fewer activities or likes that could not be shared by a younger user. For example, a user whose favorite movie is <em>Casablanca</em> may be an older user or a teenage film buff. This inherent difficulty for human annotators in identifying older users except by explicit cues (such as indications of parenthood or a working career) translates to a gold dataset for <code class="language-plaintext highlighter-rouge">IS_OLD</code> consisting primarily of examples that are easier for machine learning models to identify, and consequently <code class="language-plaintext highlighter-rouge">IS_OLD</code> is easier for the models to perform well on. This interpretation is supported by the fact that the best-performing hyperparameters for the baseline models in the <code class="language-plaintext highlighter-rouge">IS_OLD</code> task have the maximum number of n-gram features set at 5000, while the <code class="language-plaintext highlighter-rouge">IS_YOUNG</code> task models have it set at 10000 or 15000 (see Table 3).</p>
+
+<p><img src="../assets/img/turn_age_id_group/best_hyperparams.png" alt="Best-performing hyperparameters for the logistic regression model." /></p>
+
+<p><strong>Table 3:</strong> Best-performing hyperparameters for the logistic regression model</p>
+
+<h3 id="qualitative-inspection-of-bert-model-failures">Qualitative inspection of BERT model failures</h3>
+
+<p><img src="../assets/img/turn_age_id_group/qualitative_analysis.png" alt="Qualitative analysis for BERT model failures." /></p>
+
+<p><strong>Table 4:</strong> Contexts where the <code class="language-plaintext highlighter-rouge">IS_OLD</code> BERT model made an incorrect prediction</p>
+
+<p>As shown in Table 4, we find that the <code class="language-plaintext highlighter-rouge">IS_OLD</code> BERT model has a tendency of producing false positives for some short sequences. This may perhaps be explained by some of the phrases beingmore commonly used by adults than younger users, such as ‘i agree’, ‘sure’, ‘quite fine’. We also find that the model defaults to positive predictions when it encounters contradictions. Note that the example in Table 4 probably reflects a failure in transcription as well, i.e. the user likely said something that was mistranscribed as “i want to talk with my kid”.</p>
+
+<p>In some cases, ostensibly incorrect predictions turn out to be errors in our weakly supervised labels, and the BERT model correctly infers that the user is an older user. Finally, for the model’s false negatives,we were not able to find consistent patterns in the model’s prediction errors, but did find that they allinvolved longer sequences (i.e. contexts with more than 500 characters).</p>
+
+<h1 id="demonstration">Demonstration</h1>
+
+<p>We provide a brief overview of static mode and interactive mode with screenshots of example use cases.</p>
+
+<p>Static mode. The user can upload a CSV file where each line is a conversational turn, with a unique identifier, and pass it for turn-by-turn inference as well as a report on total latency. This is useful if a user wants to learn more about their clients from past conversational data. We continue with the example from the System Description section:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>ID</strong></th>
+      <th><strong>Human</strong></th>
+      <th><strong>Bot</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>hi</td>
+      <td>Hello! How are you today?</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>i went to school</td>
+      <td>That sounds fun! What did you do?</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>i studied math and had a lot of work</td>
+      <td>Oh, I’m sorry to hear that.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>hi</td>
+      <td>Hello! How are you today?</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>i’m alright thanks what about you</td>
+      <td>I’m good, thanks for asking! Hey, if you don’t mind me asking, what’s your favorite dish?</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>excuse me what?</td>
+      <td>Yeah, what do you like to eat?</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>I guess uh fish tacos uh are pretty good</td>
+      <td>I love fish tacos as well!</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The above table shows two conversations with ID 1 and 2. Conversation 1 features someone talking about school; conversation 2 features another individual talking hesitantly about fish tacos. Then, the user can select a conversation (either 1 or 2) from a drop-down menu, and click on the “Run inference on conversational data” button. At this point, the application will automatically extract the data from the column with the human text, and give you your predictions as well as the total latency, giving us a printout of the form seen in the System Description section.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Human</strong></th>
+      <th><strong>Prediction</strong></th>
+      <th><strong>Confidence</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>hi</td>
+      <td>?</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>i went to school</td>
+      <td>YOUNG</td>
+      <td>0.9000</td>
+    </tr>
+    <tr>
+      <td>i studied math and had a lot of work</td>
+      <td>YOUNG</td>
+      <td>0.8985</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">Inference (16 tokens, device=cuda) took 88ms.</code></p>
+
+<p>This shows a printout of turn-by-turn model predictions and confidence scores, as well as a final report on the latency for all predictions. In this toy example, after saying “hi,” the model is uncertain, as denoted by the “?” in the Prediction column and the “NaN” in the Confidence column. This is expected. Then, once the user mentions “school,” in subsequent turns the user is classified as <code class="language-plaintext highlighter-rouge">YOUNG</code> with high confidence, as needed.</p>
+
+<p>Interactive mode. This mode allows the user to interactively type sentences for live prediction. This is useful for getting estimates of client age group in hypothetical situations that one might expect to encounter in the wild. To use this mode, the user can simply type each sentence that a user might say on a new line, and then run inference by clicking on the “Run inference on conversational data” button. As with static mode, this will output turn-by-turn predictions as well as the total latency. The output takes on the exact same form as static mode.</p>
+
+<p><img src="../assets/img/turn_age_id_group/static_mode.png" alt="A screenshot of static mode, with a preview of conversational data." /></p>
+
+<p><strong>Fig. 3:</strong> A screenshot of static mode, featuring a preview of conversational data. The user can run inference on this conversation by clicking on “Run inference on conversational data.”</p>
+
+<p><img src="../assets/img/turn_age_id_group/interactive_mode.png" alt="A screenshot of interactive mode, with an area for user text input." /></p>
+
+<p><strong>Fig. 4:</strong> A screenshot of interactive mode, featuring a printout of model predictions as well as the interactive text input area.</p>
+
+<h1 id="post-mortem">Post-Mortem</h1>
+
+<p><strong>Quality and quantity in data-labeling.</strong> One of the early challenges that we faced was acquiring a sizable labeled dataset. Our first approach was to hand label several conversations from the Alexa Prize competition. However, this proved to be very inefficient and we were only able to accumulate on the order of 7,000 labeled samples. Thus, we transitioned to a “weakly supervised” approach (as described above) that enabled us to construct a much larger dataset. Moving forward, we intend to improve upon our weakly supervised data collection processes by using tools such as Snorkel that would enable us to use more powerful labeling functions and account for correlations/anti-correlations between labeling functions. We would also expand our existing set of regexes to be more comprehensive. Furthermore, in sampling conversational turns for our datasets, we naively included the entirety of the conversation, leading to a few long conversations having an outsized impact on model training, which likely impacted model robustness negatively. In future interations, we can address this by sampling a maximum of <em>k</em> utterances from each conversation instead of the whole conversation.</p>
+
+<p><strong>Modeling improvements.</strong> We considered pre-training then fine-tuning a dialog model that incorporates both human and bot utterances, but chose the more straightforward BERT fine-tuning approach as we assumed human utterances were sufficient to solve this task. In retrospect, our assumption was too strong, as the BERT fine-tuning approach is inherently unable to contextualize the user’s utterances with respect to the bot’s prompts and questions. This can produce age-discriminative features, as users of different age groups may respond to particular questions or prompts in age-specific ways (i.e. perhaps children are more likely to give short telegraphic responses). A dialog model paradigm would allow us to sidestep this limitation.</p>
+
+<p><strong>UI/UX design considerations.</strong> With regards to application design, the team opted to use Streamlit for production. This is a natural choice due to its simplicity and seamless integration with Python machine learning modules, and allows both technical and non-technical practitioners to dynamically glean age-related information from conversational data through our system. We envision expanding our application to include a “playground” like interface where machine learning engineers can fine-tune our age-classification modules to their specific use cases and use the interface and thus better understand the performance of their own modules. In other words, they would be able to explore edge cases and visualize regions of the sample space in which their fine-tuned model performed poorly on. Access to such an interface would allow for faster retraining and model iteration loops.</p>
+
+<h1 id="broader-impacts">Broader Impacts</h1>
+
+<p><strong>Societal prejudice.</strong> To mitigate the impact of societal bias in our labels, for our weakly-supervised key phrases, whenever we used a gendered phrase to scrape data, we used both gendered and gender-neutral counterparts as well (i.e. “my husband,” “my wife,” “my partner”). This helps ensure appropriate coverage for our weakly-supervised dataset across various societal lines. Further work is necessary to ensure that as we expand weakly-supervised labeling, that we use culturally sensitive and inclusive terminology so that our system performs equitably across all groups.</p>
+
+<p><strong>User privacy and agency.</strong> Personalization is particularly relevant to user privacy; by definition, personalization requires inferring user information. Thus, by design, we do not infer the user’s exact age; only a general age group (young vs. old). These categories are left intentionally vague while still having sufficient predictive power, in order to balance utility to a practitioner designing an ML system that uses age information while preserving user privacy. We further do not cache or store any inputs to our model; our UI is entirely memoryless with respect to particular user inputs to avoid even the perception of mishandling user data.</p>
+
+<p><strong>Intended and unintended use cases.</strong> We find it important to warn that ML systems using our model as an upstream module ought to be aware of the potential downstream impacts. This system is an early-stage project and it is still limited; we attempt to mitigate the potential harms from relying unconditionally on model predictions by abstaining from outputting unconfident predictions. This does not preclude the possibility of confidently wrong predictions, which can either happen as a limitation of our model or from a malicious actor; the latter topic is well-explored in adversarial machine learning. We stress that even with an age classifier achieving perfect accuracy, using such personalization systems to make life-altering decisions on human subjects is <strong>far outside the intended use of our algorithm;</strong> our intent is that this system be used for conversational AI purposes <em>only,</em> within systems that do not affect human safety, freedom, or governance.</p>
+
+<h2 id="contributions">Contributions</h2>
+
+<ul>
+  <li>Avanika handled <code class="language-plaintext highlighter-rouge">IS_YOUNG</code> model training and building a docker container for the application.</li>
+  <li>Caleb handled data preprocessing / dataset construction, and built the pipelines for training and evaluating the BERT models (integrated with Weights &amp; Biases) and the baseline TF-IDF and BOW logistic regression models. He also handled <code class="language-plaintext highlighter-rouge">IS_OLD</code> model training.</li>
+  <li>Trenton built the data scraping and transformation pipeline, including the weakly-supervised data labeling pipeline. He also proposed and implemented the out-of-distribution detection scheme. He also designed and created the model UI.</li>
+</ul>
+
+<h2 id="references">References</h2>
+<p>[1] Li Zhou, Jianfeng Gao, Di Li, and Heung-Yeung Shum.  The design and implementation of xiaoice, an empathetic social chatbot, 2019.</p>
+
+<p>[2] Daniel Adiwardana, Minh-Thang Luong, David R. So, Jamie Hall, Noah Fiedel, Romal Thoppi-lan, Zi Yang, Apoorv Kulshreshtha, Gaurav Nemade, Yifeng Lu, and Quoc V. Le. Towards a human-like open-domain chatbot, 2020.</p>
+
+<p>[3] Ashwin  Paranjape,  Abigail  See,  Kathleen  Kenealy,  Haojun  Li,  Amelia  Hardy,  Peng  Qi,  Kaushik Ram Sadagopan, Nguyet Minh Phu, Dilara Soylu, and Christopher D. Manning. Neural generation meets real people: Towards emotionally engaging mixed-initiative conversations, 2020.</p>
+
+<p>[4] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.  Bert: Pre-training ofdeep bidirectional transformers for language understanding.arXiv preprint arXiv:1810.04805,2018.</p>
+
+<p>[5] Dan Hendrycks and Kevin Gimpel. A baseline for detecting misclassified and out-of-distributionexamples in neural networks, 2018.</p>
+
+
+      <div class="page-footer">
+        <div class="page-share">
+          <a href="https://twitter.com/intent/tweet?text=Turn-by-Turn Age Group ID From Conversational Data&url=https://stanford-cs329s.github.io//dont-kid-yourself/" title="Share on Twitter" rel="nofollow" target="_blank">Twitter</a>
+          <!-- <a href="https://facebook.com/sharer.php?u=https://stanford-cs329s.github.io//dont-kid-yourself/" title="Share on Facebook" rel="nofollow" target="_blank">Facebook</a> -->
+          <!-- <a href="https://plus.google.com/share?url=https://stanford-cs329s.github.io//dont-kid-yourself/" title="Share on Google+" rel="nofollow" target="_blank">Google+</a> -->
+        </div>
+        <div class="page-tag">
+          
+            <a href="/reports/tags#Conversational-AI" class="tag">&#35; Conversational-AI</a>
+          
+            <a href="/reports/tags#NLP" class="tag">&#35; NLP</a>
+          
+        </div>
+      </div>
+      <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//cs329s-winter2021-reports.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-103070243-6', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+
+</body>
+</html>
