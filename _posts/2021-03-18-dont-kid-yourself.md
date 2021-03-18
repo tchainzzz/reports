@@ -64,12 +64,12 @@ Fig 1: Schematic of BERT architecture, which we use for our sequence classificat
 Fig 2: Formula for TF-IDF (left) and visualization of count vectorization (right), alternative word featurization techniques that we try.
 
 
-Logistic regression baselines. To benchmark the performance of our fine-tuned BERT models, we present two baselines, a TF-IDF logistic regression model and a bag-of-words logistic regression model. We use L2 regularization and choose the best hyperparameters using grid search.
+**Logistic regression baselines.** To benchmark the performance of our fine-tuned BERT models, we present two baselines, a TF-IDF logistic regression model and a bag-of-words logistic regression model. We use L2 regularization and choose the best hyperparameters using grid search.
 
 
 ## Evaluation
 
-![Evaluation of BERT model and baselines on test split and gold dataset.](../assets/img/turn_age_id_group/mode_accuracy_new.png)
+<img src="https://raw.githubusercontent.com/tchainzzz/reports/cs329s-youre-kidding-me/assets/img/turn_age_id_group/mode_accuracy_new.png" width="700" class="center">
 
 Table 1: Evaluation of BERT model and baselines on test split and gold dataset. Although there is a gap between our gold-labeled and weakly-supervised performance, we still achieve promising results using BOW for the `IS_YOUNG` model and BERT for the `IS_OLD` model.
 
@@ -78,7 +78,10 @@ We evaluate the accuracy and F1 score of the BERT models and baselines on the te
 ### Differences in `IS_YOUNG` and `IS_OLD` task difficulty 
 For the `IS_YOUNG` task, we find that the low F1 scores of BERT and TF-IDF are due to their high false negative rates. This suggests that there are useful signals of a young user's age that the model is not currently able to pick up on, resulting in a false negative. We hypothesize that the disparity in performance between the `IS_OLD` and `IS_YOUNG` tasks may be due to inherent differences in difficulty. 
 
-Specifically, the ways in which an annotator might identify a user as someone who is young are more varied -- the user's choice of favorite foods, TV shows, and movies may make it apparent that the user is not old, while the converse is less likely to occur, i.e. there are fewer activities or likes that could not be shared by a younger user. For example, a user whose favorite movie is Casablanca may be an older user or a teenage film buff. This inherent difficulty for human annotators in identifying older users except by explicit cues (such as indications of parenthood or a working career) translates to a gold dataset for `IS_OLD` consisting primarily of examples that are easier for machine learning models to identify, and consequently `IS_OLD` is easier for the models to perform well on. This interpretation is supported by the fact that the best-performing hyperparameters for the baseline models in the `IS_OLD` task have the maximum number of n-gram features set at 5000, while the `IS_YOUNG` task models have it set at 10000 or 15000.
+Specifically, the ways in which an annotator might identify a user as someone who is young are more varied -- the user's choice of favorite foods, TV shows, and movies may make it apparent that the user is not old, while the converse is less likely to occur, i.e. there are fewer activities or likes that could not be shared by a younger user. For example, a user whose favorite movie is _Casablanca_ may be an older user or a teenage film buff. This inherent difficulty for human annotators in identifying older users except by explicit cues (such as indications of parenthood or a working career) translates to a gold dataset for `IS_OLD` consisting primarily of examples that are easier for machine learning models to identify, and consequently `IS_OLD` is easier for the models to perform well on. This interpretation is supported by the fact that the best-performing hyperparameters for the baseline models in the `IS_OLD` task have the maximum number of n-gram features set at 5000, while the `IS_YOUNG` task models have it set at 10000 or 15000.
+
+![Best-performing hyperparameters for the logistic regression model.](../assets/img/turn_age_id_group/best_hyperparams.png)
+Table 2: Best-performing hyperparameters for the logistic regression model
 
 # Demonstration
 
