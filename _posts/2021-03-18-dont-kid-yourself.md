@@ -1,6 +1,6 @@
 # Don't Kid Yourself: Turn-by-Turn Age Group ID From Conversational Data
 
-**Team members:** Trenton Chang, Caleb Chiam, Avanika Narayanan
+**Team members:** Trenton Chang, Caleb Chiam, Avanika Narayan
 
 # The Problem
 
