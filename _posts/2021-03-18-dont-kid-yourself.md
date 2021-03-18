@@ -39,8 +39,6 @@ The above table shows two conversations with ID 1 and 2. Conversation 1 features
 
 Interactive mode. In this mode, the user can type arbitrary sentences representing an imaginary conversation, in order to more narrowly probe hypothetical situations in conversational data. This can give a user signal as to whether strong age-related information can be extracted from a given conversational setting. The form of the output is the same as above.
 
-Fig. 1: system schematic
-
 # Our ML-Powered Approach
 
 ## Data collection and processing
@@ -73,15 +71,30 @@ Fig 2: Formula for TF-IDF (left) and visualization of count vectorization (right
 
 Table 1: Evaluation of BERT model and baselines on test split and gold dataset. Although there is a gap between our gold-labeled and weakly-supervised performance, we still achieve promising results using BOW for the `IS_YOUNG` model and BERT for the `IS_OLD` model.
 
-We evaluate the accuracy and F1 score of the BERT models and baselines on the test split and gold datasets. We find that all models perform well on the test split of the data, but do not generalize as well to the gold dataset. For the `IS_OLD` task, the BERT model achieves the highest F1 score on the gold dataset and an accuracy score that is very slightly worse than the best-performing TF-IDF model. For the `IS_YOUNG` task, however, BERT performs poorly with a low F1 score stemming from its high false negative rate, and BOW achieves the best performance by far.
+We evaluate the accuracy and F1 score of the BERT models and baselines on the test split and gold datasets. We find that all models perform well on the test split of the data, but do not generalize as well to the gold dataset. That the baselines perform particularly well on the test split is unsurprising given thatthe positive examples in the weakly supervised data have been identified based on the presence ofspecific key phrases. Thus, a logistic regression model that weights these phrases highly would beable to make predictions with very high accuracy. However, it is noteworthy that, for the `IS_OLD` task, the BERT model achieves the highest F1 score on the gold dataset and an accuracy score that is very slightly worse than the best-performing TF-IDF model. This suggests that BERT has picked up on useful signals beyond simple phrase detection (see Table 2 for a few examples.) For the `IS_YOUNG` task, however, BERT performs poorly with a low F1 score stemming from its high false negative rate, and BOW achieves the best performance by far.
+
+<img src="https://raw.githubusercontent.com/tchainzzz/reports/cs329s-youre-kidding-me/assets/img/turn_age_id_group/correct_pred.png" width="700" class="center">
+
+Table 2: Contexts where the BERT model correctly predicts the label on the `IS_OLD` task while the logistic regression models do not.
 
 ### Differences in `IS_YOUNG` and `IS_OLD` task difficulty 
 For the `IS_YOUNG` task, we find that the low F1 scores of BERT and TF-IDF are due to their high false negative rates. This suggests that there are useful signals of a young user's age that the model is not currently able to pick up on, resulting in a false negative. We hypothesize that the disparity in performance between the `IS_OLD` and `IS_YOUNG` tasks may be due to inherent differences in difficulty. 
 
-Specifically, the ways in which an annotator might identify a user as someone who is young are more varied -- the user's choice of favorite foods, TV shows, and movies may make it apparent that the user is not old, while the converse is less likely to occur, i.e. there are fewer activities or likes that could not be shared by a younger user. For example, a user whose favorite movie is _Casablanca_ may be an older user or a teenage film buff. This inherent difficulty for human annotators in identifying older users except by explicit cues (such as indications of parenthood or a working career) translates to a gold dataset for `IS_OLD` consisting primarily of examples that are easier for machine learning models to identify, and consequently `IS_OLD` is easier for the models to perform well on. This interpretation is supported by the fact that the best-performing hyperparameters for the baseline models in the `IS_OLD` task have the maximum number of n-gram features set at 5000, while the `IS_YOUNG` task models have it set at 10000 or 15000.
+Specifically, the ways in which an annotator might identify a user as someone who is young are more varied -- the user's choice of favorite foods, TV shows, and movies may make it apparent that the user is not old, while the converse is less likely to occur, i.e. there are fewer activities or likes that could not be shared by a younger user. For example, a user whose favorite movie is _Casablanca_ may be an older user or a teenage film buff. This inherent difficulty for human annotators in identifying older users except by explicit cues (such as indications of parenthood or a working career) translates to a gold dataset for `IS_OLD` consisting primarily of examples that are easier for machine learning models to identify, and consequently `IS_OLD` is easier for the models to perform well on. This interpretation is supported by the fact that the best-performing hyperparameters for the baseline models in the `IS_OLD` task have the maximum number of n-gram features set at 5000, while the `IS_YOUNG` task models have it set at 10000 or 15000 (see Table 3).
 
 ![Best-performing hyperparameters for the logistic regression model.](../assets/img/turn_age_id_group/best_hyperparams.png)
-Table 2: Best-performing hyperparameters for the logistic regression model
+
+Table 3: Best-performing hyperparameters for the logistic regression model
+
+### Qualitative inspection of BERT model failures
+
+![Qualitative analysis for BERT model failures.](../assets/img/turn_age_id_group/qualitative_analysis.png)
+
+Table 4: Contexts where the `IS_OLD` BERT model made an incorrect prediction
+
+As shown in Table 4, we find that the `IS_OLD` BERT model has a tendency of producing false positives for some short sequences. This may perhaps be explained by some of the phrases beingmore commonly used by adults than younger users, such as 'i agree', 'sure', 'quite fine'. We also find that the model defaults to positive predictions when it encounters contradictions. Note that the example in Table 4 probably reflects a failure in transcription as well, i.e. the user likely said something that was mistranscribed as “i want to talk with my kid". 
+
+In some cases, ostensibly incorrect predictions turn out to be errors in our weakly supervised labels, and the BERT model correctly infers that the user is an older user. Finally, for the model’s false negatives,we were not able to find consistent patterns in the model’s prediction errors, but did find that they allinvolved longer sequences (i.e. contexts with more than 500 characters).
 
 # Demonstration
 
