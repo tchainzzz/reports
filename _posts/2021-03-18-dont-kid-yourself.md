@@ -1,3 +1,12 @@
+---
+layout: post
+title: Turn-by-Turn Age Group ID From Conversational Data
+date: 2021-03-18 01:04:00 +0700
+description: Using real-world conversational data, we develop a system for providing turn-by-turn age group predictions.
+tags: [Conversational-AI, NLP]
+comments: true
+---
+
 # Don't Kid Yourself: Turn-by-Turn Age Group ID From Conversational Data
 
 **Team members:** Trenton Chang, Caleb Chiam, Avanika Narayan
