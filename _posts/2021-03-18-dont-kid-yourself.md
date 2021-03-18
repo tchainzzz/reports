@@ -20,7 +20,7 @@ The backend operates on the input conversational data in two phases: 1) an ML-po
 
 These model predictions are then passed to an out-of-distribution detector which works as follows [5]. In cases where both models return a negative prediction, or contradict one another, we mark this situation as “unknown,” and output this result to the user. Alternately, using maximum-softmax probability based methods, if the model prediction falls below a certain confidence threshold, we also mark it as unknown. These failure modes most often occur at the beginning of  the conversation, when the user’s entire conversational history comprises a greeting and their name.
 
-Static mode. In static mode, the user already has a preset CSV file containing conversational logs. This mode is most useful if the user wants to glean age information about a preset sample of users from their conversational data. We outline the format of the file below in our demonstration. This mode takes as input a CSV file of conversational information, and outputs a printout of model predictions and confidence scores on each turn of the data.
+**Static mode.** In static mode, the user already has a preset CSV file containing conversational logs. This mode is most useful if the user wants to glean age information about a preset sample of users from their conversational data. We outline the format of the file below in our demonstration. This mode takes as input a CSV file of conversational information, and outputs a printout of model predictions and confidence scores on each turn of the data.
 
 As a toy example, one might upload something of the form
 
@@ -37,7 +37,7 @@ As a toy example, one might upload something of the form
 The above table shows two conversations with ID 1 and 2. Conversation 1 features the user talking about school; conversation 2 features the user talking [hesitantly] about fish tacos. This is then passed to the backend, from which a printout about the model predictions, model confidence, and latency is obtained.
 
 
-Interactive mode. In this mode, the user can type arbitrary sentences representing an imaginary conversation, in order to more narrowly probe hypothetical situations in conversational data. This can give a user signal as to whether strong age-related information can be extracted from a given conversational setting. The form of the output is the same as above.
+**Interactive mode.** In this mode, the user can type arbitrary sentences representing an imaginary conversation, in order to more narrowly probe hypothetical situations in conversational data. This can give a user signal as to whether strong age-related information can be extracted from a given conversational setting. The form of the output is the same as above.
 
 # Our ML-Powered Approach
 
@@ -47,7 +47,7 @@ We use two data streams that we pulled from our internal Alexa Prize conversatio
 * a small **gold-labeled** set of 7426 conversational turns over 270 conversations. For each conversational turn, we output whether we believe each context is from a young or old user, or unknown, based on that turn (and the turns before it).
 * a **weakly-supervised** set of 102252 turns over 1854 conversations. These are scraped programmatically using manually identified phrases associated with age, such as “mommy”, “daddy”, “my kids”, “schoolwork” -- taking care to include both gendered and gender-neutral terminology. We also scrape instances of “years old”, where the user explicitly makes an age disclosure. Conversational turns prior to the age-identifying phrase are labeled as unknown, while all turns including and after the phrase are labeled with the corresponding age group label.
 
-From these sets of data, we construct weakly-supervised (WS) and gold-labeled subsets for training and evaluation. These subsets are engineered to be balanced in the number of positive and negative conversations and conversational turns, with steps taken to prevent data leakage between splits. We do a stratified 70-15-15 train-val-test split.
+From these sets of data, we construct weakly-supervised and gold-labeled subsets for training and evaluation. These subsets are engineered to be balanced in the number of positive and negative conversations and conversational turns, with steps taken to prevent data leakage between splits. We do a stratified 70-15-15 train-val-test split.
 
 ## Modeling
 
@@ -136,12 +136,11 @@ Fig. 4: A screenshot of interactive mode, featuring a printout of model predicti
 
 # Post-Mortem
 
-**Modeling considerations.**
-Compile more comprehensive regexes (e.g. why schoolwork, but not school)
-Sample 10 utterances from each conversation to prevent long conversations from having an outsized influence in training
-Compiled more hand-training labels for evaluation (gold dataset for IS_OLD was particularly small)
+**Quality and quantity in data-labeling.** One of the early challenges that we faced was acquiring a sizable labeled dataset. Our first approach was to hand label several conversations from the Alexa Prize competition. However, this proved to be very inefficient and we were only able to accumulate on the order of 7,000 labeled samples. Thus, we transitioned to a “weakly supervised” approach (as described above) that enabled us to construct a much larger dataset. Moving forward, we intend to improve upon our weakly supervised data collection processes by using tools such as Snorkel that would enable us to embed a more heuristics driven approach to our labeling process. We would also expand our existing set of regexes to be more comprehensive.
 
-**Quality and quantity in data-labeling.** One of the early challenges that we faced was acquiring a sizable labeled dataset. Our first approach was to hand label several conversations from the Alexa Prize competition. However, this proved to be inefficient and we were only able to accumulate on the order of 7,000 labeled samples. Thus, we transitioned to a “weakly supervised” approach (as described above) that enabled us to accrue a much larger dataset. Moving forward, we intend to improve upon our weakly supervised data collection processes by using tools such as Snorkel that would enable us to embed a more heuristics driven approach to our labeling process.
+**Modeling improvements.** We had considered the possibility of pre-training then fine-tuning a dialog model that incorporates both human and bot utterances, but chose the more straightforward BERT fine-tuning approach given the limited time we had and the large amount of time required to pre-train a model. We acknowledge that the BERT fine-tuning approach is necessarily incomplete as it is unable to contextualize the user’s utterances with respect to the bot’s prompts and questions, and would opt for the dialog model paradigm given more time to work on this.
+
+Given a greater volume of data, we would also have sampled some _k_ utterances from each conversation when constructing the datasets, instead of including the entirety of the conversation in datasets. We realized only later on in the project that including the entirety of the conversation translated to some long conversations having an outsized influence in model learning, which likely resulted in less robust model performance.
 
 **UI/UX design considerations.** With regards to application design, the team opted to use Streamlit for production. This is a natural choice due to its simplicity and seamless integration with Python machine learning modules, and allows both technical and non-technical practitioners to dynamically glean age-related information from conversational data through our system. We envision expanding our application to include a “playground” like interface where machine learning engineers can fine-tune our age-classification modules to their specific use cases and use the interface and thus better understand the performance of their own modules. In other words, they would be able to explore edge cases and visualize regions of the sample space in which their fine-tuned model performed poorly on. Access to such an interface would allow for faster retraining and model iteration loops.
 
