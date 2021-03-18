@@ -4,7 +4,7 @@
 
 # The Problem
 
-Open-domain AI conversation is an unsolved task in natural language processing. Despite huge breakthroughs like Xiaoice, Meena, and Stanford’s own Chirpy Cardinal, we still have a long way to go before we achieve human-like conversation.
+Open-domain AI conversation is an unsolved task in natural language processing. Despite huge breakthroughs like Xiaoice, Meena, and Stanford’s own Chirpy Cardinal, we still have a long way to go before we achieve human-like conversation [1, 2, 3].
 
 One particular challenge inherent in open-domain conversations is its subjectivity: different users want to talk about different things, or might prefer different styles of conversation. This means that personalizing the user’s experience in a conversation is important. Although we can’t infer every single fact about a particular user, we can focus on an important subproblem: age group classification. This task is relevant because of age differences in human conversational interests: for example, younger users may be more inclined to discuss schoolwork, but older users may be more interested in discussing their children or career. Our interest is in automating age classification towards this end.
 
@@ -18,7 +18,7 @@ The core of our front-end is a Streamlit-based wrapper with two modes of usage, 
 
 The backend operates on the input conversational data in two phases: 1) an ML-powered phase and 2) an out-of-distribution filtering phase. The first ML-powered step is based on two BERT-based transformer models for binary sequence classification: one for classifying young users, and one for classifying old users. This is similar to the one-versus-rest setup, and allows us to abstain from making predictions in unconfident regions. These models each take in a particular conversation, and output turn-level predictions as follows: For each conversational turn, the input conversation is passed to both models, who output turn-by-turn predictions for the conversation. Internally, for each sentence, the model predicts each age group attribute based on what the human has said up to the current turn. More details about the particular modeling choices and the inference setup are provided later in this post.
 
-These model predictions are then passed to an out-of-distribution detector which works as follows. In cases where both models return a negative prediction, or contradict one another, we mark this situation as “unknown,” and output this result to the user. Alternately, using maximum-softmax probability based methods, if the model prediction falls below a certain confidence threshold, we also mark it as unknown. These failure modes most often occur at the beginning of  the conversation, when the user’s entire conversational history comprises a greeting and their name.
+These model predictions are then passed to an out-of-distribution detector which works as follows [5]. In cases where both models return a negative prediction, or contradict one another, we mark this situation as “unknown,” and output this result to the user. Alternately, using maximum-softmax probability based methods, if the model prediction falls below a certain confidence threshold, we also mark it as unknown. These failure modes most often occur at the beginning of  the conversation, when the user’s entire conversational history comprises a greeting and their name.
 
 Static mode. In static mode, the user already has a preset CSV file containing conversational logs. This mode is most useful if the user wants to glean age information about a preset sample of users from their conversational data. We outline the format of the file below in our demonstration. This mode takes as input a CSV file of conversational information, and outputs a printout of model predictions and confidence scores on each turn of the data.
 
@@ -57,9 +57,7 @@ From these sets of data, we construct weakly-supervised (WS) and gold-labeled su
 
 Fig 1: Schematic of BERT architecture, which we use for our sequence classification models.
 
-BERT. We finetune a BERT model for sequence classification, specifically `bert-base-uncased.` We use the SimpleTransformer library to initialize the model in a wrapper that allows for sliding window predictions, where, if the input exceeds the BERT model token limit, it is split into multiple windows and predictions are computed separately for each window and then aggregated into an overall label. To find optimal hyperparameters, we run a sweep configuration using Weights & Biases.
-
-
+**BERT.** We finetune a BERT [4] model for sequence classification, specifically `bert-base-uncased.` We use the SimpleTransformer library to initialize the model in a wrapper that allows for sliding window predictions, where, if the input exceeds the BERT model token limit, it is split into multiple windows and predictions are computed separately for each window and then aggregated into an overall label. To find optimal hyperparameters, we run a sweep configuration using Weights & Biases.
 
 Fig 2: Formula for TF-IDF (left) and visualization of count vectorization (right), alternative word featurization techniques that we try.
 
@@ -141,5 +139,13 @@ Compiled more hand-training labels for evaluation (gold dataset for IS_OLD was p
 Avanika handled model training and building a docker container for the application. Caleb handled data preprocessing / dataset construction, and built the architecture for training and evaluating the BERT models (integrated with Weights & Biases) and the baseline TF-IDF and BOW logistic regression models.Trenton built the data scraping and transformation pipeline, including the weakly-supervised data labeling pipeline. He also proposed and implemented the out-of-distribution detection scheme. He also designed and created the model UI.
 
 ## References 
-(Google scholar gives APA format by default; use that)
+[1] Li Zhou, Jianfeng Gao, Di Li, and Heung-Yeung Shum.  The design and implementation of xiaoice, an empathetic social chatbot, 2019.
+
+[2] Daniel Adiwardana, Minh-Thang Luong, David R. So, Jamie Hall, Noah Fiedel, Romal Thoppi-lan, Zi Yang, Apoorv Kulshreshtha, Gaurav Nemade, Yifeng Lu, and Quoc V. Le. Towards a human-like open-domain chatbot, 2020.
+
+[3] Ashwin  Paranjape,  Abigail  See,  Kathleen  Kenealy,  Haojun  Li,  Amelia  Hardy,  Peng  Qi,  Kaushik Ram Sadagopan, Nguyet Minh Phu, Dilara Soylu, and Christopher D. Manning. Neural generation meets real people: Towards emotionally engaging mixed-initiative conversations, 2020.
+
+[4] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.  Bert: Pre-training ofdeep bidirectional transformers for language understanding.arXiv preprint arXiv:1810.04805,2018.
+
+[5] Dan Hendrycks and Kevin Gimpel. A baseline for detecting misclassified and out-of-distributionexamples in neural networks, 2018.
 
