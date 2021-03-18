@@ -155,8 +155,8 @@ Compiled more hand-training labels for evaluation (gold dataset for IS_OLD was p
 
 ## Contributions
 
-- Avanika handled model training and building a docker container for the application. 
-- Caleb handled data preprocessing / dataset construction, and built the pipelines for training and evaluating the BERT models (integrated with Weights & Biases) and the baseline TF-IDF and BOW logistic regression models. 
+- Avanika handled `IS_YOUNG` model training and building a docker container for the application. 
+- Caleb handled data preprocessing / dataset construction, and built the pipelines for training and evaluating the BERT models (integrated with Weights & Biases) and the baseline TF-IDF and BOW logistic regression models. He also handled `IS_OLD` model training.
 - Trenton built the data scraping and transformation pipeline, including the weakly-supervised data labeling pipeline. He also proposed and implemented the out-of-distribution detection scheme. He also designed and created the model UI.
 
 ## References 
