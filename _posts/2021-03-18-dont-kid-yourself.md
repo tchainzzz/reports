@@ -11,6 +11,8 @@ comments: true
 
 **Team members:** Trenton Chang, Caleb Chiam, Avanika Narayan
 
+**_Due to data privacy issues, this report is meant to be read only by the CS329S course staff and should not be shared on any public platform._**
+
 # The Problem
 
 Open-domain AI conversation is an unsolved task in natural language processing. Despite huge breakthroughs like Xiaoice, Meena, and Stanford’s own Chirpy Cardinal, we still have a long way to go before we achieve human-like conversation [1, 2, 3].
